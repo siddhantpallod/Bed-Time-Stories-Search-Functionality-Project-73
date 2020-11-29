@@ -1,13 +1,13 @@
 import * as React from 'react';
-import { StyleSheet, Text, View,ScrollView,TouchableOpacity } from 'react-native';
-import {SearchBar} from 'react-native-elements';
+import { StyleSheet, Text, View,ScrollView,TouchableOpacity,KeyboardAvoidingView } from 'react-native';
+import {SearchBar,Header} from 'react-native-elements';
 import db from '../config'
 
 export default class ReadStoryScreen extends React.Component{
 
     constructor(){
         super();
-        this.setState = {
+        this.state = {
         search : '',
         dataSource : [],
         allStories : []
@@ -16,10 +16,12 @@ export default class ReadStoryScreen extends React.Component{
 
     retriveStories = async () => {
         var allStories = [];
-        var storiesRef = await db.collection('stories').get()
-        storiesRef .docs.map((doc) => {
+        var storiesRef = await db.collection('stories').get().then((querySnapshot)=>{
+          querySnapshot.forEach((doc)=>{
             allStories.push(doc.data())
+          })
         })
+      
         this.setState({
             allStories : allStories
         })
@@ -27,7 +29,7 @@ export default class ReadStoryScreen extends React.Component{
 
     filterSearch = (searchText) => {
         var results = this.state.allStories.filter((story)=>{
-            return story.title.toUpperCase().indexOf(searchText.toUpperCase()) > -1
+            return story.title.indexOf(searchText.toUpperCase()) > -1
         })
 
         this.setState({
@@ -43,6 +45,7 @@ export default class ReadStoryScreen extends React.Component{
     render(){
         return (
           <View style={{backgroundColor: '#03b898', height:'100%'}}>
+            <KeyboardAvoidingView>
             <Header
             containerStyle={{backgroundColor: '#03b898', borderBottomWidth: 0}}
             centerComponent={{
@@ -51,7 +54,8 @@ export default class ReadStoryScreen extends React.Component{
                 color: "#ffffff",
                 fontSize: 24,
                 fontWeight: '600',
-              }}} />
+              }}} 
+              />
               
             <SearchBar placeholder="Search for Stories" round lightTheme
             containerStyle={{backgroundColor:'#03b898',borderBottomColor:'transparent',borderTopColor:'transparent'}}
@@ -77,6 +81,7 @@ export default class ReadStoryScreen extends React.Component{
                 <Text style={styles.submitText}>Refresh</Text>
               </TouchableOpacity>
             </ScrollView>
+            </KeyboardAvoidingView>
           </View>    
         );
       }
@@ -89,4 +94,21 @@ const styles = StyleSheet.create({
       alignItems: 'center',
       justifyContent: 'center',
     },
+    title : {
+      fontSize : 20
+    },
+    author : {
+      fontSize : 15
+    },
+    submit : {
+      backgroundColor : 'cyan',
+      justifyContent : 'center',
+      alignSelf : 'center',
+      borderWidth : 2,
+      borderRadius : 10
+    },
+    submitText : {
+      fontSize : 15,
+      textAlign : 'center'
+    }
   });
