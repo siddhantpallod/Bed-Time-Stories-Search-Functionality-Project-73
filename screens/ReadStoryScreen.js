@@ -80,7 +80,7 @@ export default class ReadStoryScreen extends React.Component{
                 </View>))
               }
               <TouchableOpacity style={styles.submit} 
-              onPress={this.filterSearch()}>
+              onPress={this.filterSearch('')}>
                 <Text
                  style={styles.submitText}>
                   Refresh</Text>
