@@ -61,7 +61,9 @@ export default class ReadStoryScreen extends React.Component{
             containerStyle={{backgroundColor:'#03b898',borderBottomColor:'transparent',borderTopColor:'transparent'}}
             inputContainerStyle={{backgroundColor:'#ffffff', borderRadius: 50}}
             inputStyle={{color:'#000000'}}
-            onChangeText={(text)=>{this.filterSearch(text)}} value={this.state.search} />
+            onChangeText={(text)=>
+            {this.filterSearch(text)}} 
+            value={this.state.search} />
     
             <ScrollView contentContainerStyle={{paddingBottom: 20}}>
               {this.state.search == ""
